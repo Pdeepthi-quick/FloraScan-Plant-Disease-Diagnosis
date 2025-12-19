@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloraScan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .social-icons img {
+            width: 24px;
+            height: 24px;
+            margin: 0 8px;
+            vertical-align: middle;
+        }
+        button {
+            background-color: #1F3A2D;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <h1>🌿 <strong>FloraScan</strong></h1>
+            <h5 class="tagline">AI-Driven Plant Disease Diagnosis</h5>
+        </div>
+
+        <nav class="navbar">
+            <!-- Update Home link to point to Flask route -->
+            <a href="http://127.0.0.1:5000/">Home</a>
+            <a href="http://localhost:5000/upload">Upload Image</a>
+            
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>About Flora Scan</h1>
+
+        <!-- Upload Box -->
+        <div class="upload-box">
+            <p>
+                FloraScan is an AI-powered application designed to help farmers, gardeners, and plant enthusiasts detect plant diseases accurately and efficiently. 
+                With cutting-edge machine learning models and image recognition techniques, FloraScan can provide instant diagnosis of plant diseases, giving users insights into 
+                how to treat and care for their plants effectively.
+            </p>
+            <button class="start-btn" onclick="window.location.href='http://127.0.0.1:5000/disease-info'" style="color: #FFFFFF;">Get Started</button>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            © 2025 FloraScan &nbsp;|&nbsp;
+            <a href="http://localhost:5000/privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
+        </div>
+        <div class="social-icons" style="margin-top: 10px;">
+            <!-- Replace src with your own logo image paths -->
+            <a href="https://facebook.com" target="_blank" title="Facebook">
+                <img src="{{ url_for('static', filename='images/facebook.svg') }}" alt="Facebook Logo">
+            </a>
+            <a href="https://twitter.com" target="_blank" title="Twitter">
+                <img src="{{ url_for('static', filename='images/x.svg') }}" alt="Twitter Logo">
+            </a>
+            <a href="https://instagram.com" target="_blank" title="Instagram">
+                <img src="{{ url_for('static', filename='images/instagram.svg') }}" alt="Instagram Logo">
+            </a>
+            <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+                <img src="{{ url_for('static', filename='images/linkedin.png') }}" alt="LinkedIn Logo">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Update file name when an image is selected
+        document.getElementById('fileInput')?.addEventListener('change', function () {
+            var fileName = this.files[0] ? this.files[0].name : "No file selected";
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
+
+</body>
+</html>

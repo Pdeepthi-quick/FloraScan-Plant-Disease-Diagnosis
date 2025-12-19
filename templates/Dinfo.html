@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FloraScan - Disease Info</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #2F4F3C;
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+
+    .header {
+      padding: 20px;
+      background-color: #ffffff;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .tagline {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .navbar {
+      margin-top: 15px;
+    }
+
+    .navbar a {
+      color: #2F4F3C;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 600;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .search-container {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .search-container input {
+      width: 80%;
+      max-width: 400px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #diseaseList {
+      margin-top: 30px;
+      list-style-type: none;
+      padding: 0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    #diseaseList li {
+      background-color: #ffffff;
+      color: #1F3A2D;
+      padding: 10px 15px;
+      margin: 8px 0;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    #diseaseList li:hover {
+      background-color: #e6ffe6;
+    }
+
+    #diseaseDetail {
+      background-color: #ffffff;
+      color: #1F3A2D;
+      margin: 30px auto 20px auto;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      display: none;
+      text-align: left;
+    }
+
+    #backButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #1F3A2D;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    #backButton:hover {
+      background-color: #3e6650;
+    }
+
+    footer.footer {
+      background-color: #1F3A2D;
+      padding: 20px 0;
+      text-align: center;
+      color: white;
+    }
+
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+
+    @media screen and (max-width: 768px) {
+      .search-container input {
+        width: 95%;
+        font-size: 14px;
+      }
+
+      #diseaseList li {
+        font-size: 14px;
+      }
+    }
+
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>🌿 <strong>FloraScan</strong></h1><br>
+    
+    <nav class="navbar">
+      <a href="http://localhost:5000/">Home</a>
+      <a href="http://localhost:5000/upload">Upload Image</a>
+      
+    </nav>
+  </div>
+
+  <!-- Search Box -->
+  <div class="search-container">
+    <h2>Search Plant Disease Info</h2>
+    <input type="text" id="searchInput" onkeyup="filterDiseases()" placeholder="Search for a disease...">
+
+    <ul id="diseaseList">
+      <li onclick="showDiseaseDetail('Apple Scab')">Apple Scab</li>
+      <li onclick="showDiseaseDetail('Apple Black Rot')">Apple Black Rot</li>
+      <li onclick="showDiseaseDetail('Apple Cedar Rust')">Apple Cedar Rust</li>
+      <li onclick="showDiseaseDetail('Cherry Powdery Mildew')">Cherry Powdery Mildew</li>
+      <li onclick="showDiseaseDetail('Grape Black Rot')">Grape Black Rot</li>
+      <li onclick="showDiseaseDetail('Peach Bacterial Spot')">Peach Bacterial Spot</li>
+      <li onclick="showDiseaseDetail('Pepper Bacterial Spot')">Pepper Bacterial Spot</li>
+      <li onclick="showDiseaseDetail('Potato Early Blight')">Potato Early Blight</li>
+      <li onclick="showDiseaseDetail('Potato Late Blight')">Potato Late Blight</li>
+      <li onclick="showDiseaseDetail('Strawberry Leaf Scorch')">Strawberry Leaf Scorch</li>
+      <li onclick="showDiseaseDetail('Tomato Bacterial Spot')">Tomato Bacterial Spot</li>
+      <li onclick="showDiseaseDetail('Tomato Early Blight')">Tomato Early Blight</li>
+      <li onclick="showDiseaseDetail('Tomato Late Blight')">Tomato Late Blight</li>
+      <li onclick="showDiseaseDetail('Tomato Leaf Mold')">Tomato Leaf Mold</li>
+      <li onclick="showDiseaseDetail('Tomato Septoria Leaf Spot')">Tomato Septoria Leaf Spot</li>
+      <li onclick="showDiseaseDetail('Tomato Spider Mite')">Tomato Spider Mite</li>
+      <li onclick="showDiseaseDetail('Tomato Target Spot')">Tomato Target Spot</li>
+      <li onclick="showDiseaseDetail('Tomato Mosaic Virus')">Tomato Mosaic Virus</li>
+      <li onclick="showDiseaseDetail('Tomato Yellow Leaf Curl Virus')">Tomato Yellow Leaf Curl Virus</li>
+    </ul>
+
+    <div id="diseaseDetail">
+      <button id="backButton" onclick="goBack()">← Back</button>
+      <div id="detailContent"></div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      © 2025 FloraScan &nbsp;|&nbsp;
+      <a href="http://localhost:5000/privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
+    </div>
+    <div class="social-icons" style="margin-top: 10px;">
+      <a href="https://facebook.com" target="_blank" title="Facebook">
+        <img src="{{ url_for('static', filename='images/facebook.svg') }}" alt="Facebook Logo">
+      </a>
+      <a href="https://twitter.com" target="_blank" title="Twitter">
+        <img src="{{ url_for('static', filename='images/x.svg') }}" alt="Twitter Logo">
+      </a>
+      <a href="https://instagram.com" target="_blank" title="Instagram">
+        <img src="{{ url_for('static', filename='images/instagram.svg') }}" alt="Instagram Logo">
+      </a>
+      <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+        <img src="{{ url_for('static', filename='images/linkedin.png') }}" alt="LinkedIn Logo">
+      </a>
+    </div>
+  </footer>
+
+<script>
+const diseaseDetails = {
+  "Apple Scab": {
+    definition: "Apple scab is a fungal disease caused by *Venturia inaequalis*, leading to olive-green or brown spots on leaves and fruit. It thrives in wet, cool conditions and can cause significant crop loss if not managed properly.",
+    remedies: "Use resistant apple varieties, apply fungicides early in the growing season, and remove and destroy fallen leaves to reduce sources of infection. Proper pruning to improve air circulation also helps minimize disease spread."
+  },
+  "Apple Black Rot": {
+    definition: "Black rot in apples, caused by *Botryosphaeria obtusa*, results in fruit rot, leaf spots, and limb cankers. The disease usually overwinters in mummified fruit and dead wood.",
+    remedies: "Prune out infected limbs during the dormant season and apply appropriate fungicides during the growing season. Remove mummified fruits and fallen debris to limit sources of inoculum."
+  },
+  "Apple Cedar Rust": {
+    definition: "Cedar apple rust is a fungal disease caused by *Gymnosporangium juniperi-virginianae*, creating bright orange lesions on leaves. It requires both apple and cedar trees to complete its life cycle.",
+    remedies: "Plant resistant apple varieties and remove nearby juniper hosts if possible. Use preventive fungicide sprays during the early part of the growing season."
+  },
+  "Cherry Powdery Mildew": {
+    definition: "A fungal infection (*Podosphaera clandestina*) causing white powdery growth on cherry leaves and shoots. Severe infections can lead to leaf drop and reduced fruit yield.",
+    remedies: "Prune affected parts to promote air circulation and reduce humidity around plants. Apply sulfur-based fungicides regularly as a preventive measure."
+  },
+  "Grape Black Rot": {
+    definition: "Black rot of grapes, caused by *Guignardia bidwellii*, appears as black spots on leaves, shoots, and fruit. It can lead to shriveled, mummified berries if left untreated.",
+    remedies: "Practice canopy management to enhance air movement and sunlight penetration. Remove infected debris and apply fungicides during critical periods of fruit development."
+  },
+  "Peach Bacterial Spot": {
+    definition: "Caused by *Xanthomonas campestris pv. pruni*, leading to dark, sunken spots on fruits and leaves. It reduces fruit quality and causes premature leaf drop.",
+    remedies: "Use copper-based bactericides during early growth stages to suppress the disease. Plant tolerant varieties and avoid overhead irrigation to minimize moisture on leaves."
+  },
+  "Pepper Bacterial Spot": {
+    definition: "A bacterial disease caused by *Xanthomonas spp.*, producing water-soaked spots on leaves and fruits. These spots often enlarge and turn brown or black under humid conditions.",
+    remedies: "Use certified disease-free seeds and apply copper sprays during early crop stages. Rotate crops annually to reduce pathogen buildup in the soil."
+  },
+  "Potato Early Blight": {
+    definition: "Early blight caused by *Alternaria solani* creates brown lesions with concentric rings on leaves. It typically starts on lower, older leaves and spreads upward.",
+    remedies: "Plant resistant varieties and use crop rotation practices to prevent disease carryover. Apply fungicides proactively, especially during warm, humid weather."
+  },
+  "Potato Late Blight": {
+    definition: "A devastating disease caused by *Phytophthora infestans*, leading to dark lesions on leaves and tubers. It was responsible for the Irish Potato Famine in the 1840s.",
+    remedies: "Use certified seed potatoes free from pathogens and apply fungicides at regular intervals. Destroy infected plants immediately to prevent rapid disease spread."
+  },
+  "Strawberry Leaf Scorch": {
+    definition: "Caused by *Diplocarpon earlianum*, resulting in brown necrotic areas on leaves and reduced plant vigor. Severe infections can significantly decrease fruit yield.",
+    remedies: "Use resistant strawberry varieties when available and remove infected leaves promptly. Improve air circulation by spacing plants appropriately to discourage fungal growth."
+  },
+  "Tomato Bacterial Spot": {
+    definition: "Caused by *Xanthomonas campestris pv. vesicatoria*, forming small water-soaked spots on leaves and fruits. The spots may enlarge and merge, leading to leaf blight.",
+    remedies: "Use pathogen-free seeds and apply copper sprays early in the growing season. Avoid working with wet plants to prevent bacterial spread."
+  },
+  "Tomato Early Blight": {
+    definition: "Early blight caused by *Alternaria solani* results in target-like spots and leaf yellowing. Severe infections can lead to significant defoliation and yield loss.",
+    remedies: "Rotate crops annually and apply fungicides at the first sign of symptoms. Remove and destroy infected plant debris after harvest."
+  },
+  "Tomato Late Blight": {
+    definition: "Late blight, caused by *Phytophthora infestans*, leads to dark lesions on leaves, stems, and fruits. It can destroy entire fields rapidly under moist conditions.",
+    remedies: "Plant resistant varieties and apply protective fungicides before weather conditions favor disease development. Remove and destroy infected plants immediately."
+  },
+  "Tomato Leaf Mold": {
+    definition: "Caused by *Passalora fulva*, it creates yellow spots on upper leaf surfaces and mold on undersides. It thrives in humid, poorly ventilated environments.",
+    remedies: "Provide good ventilation inside greenhouses and avoid overhead watering. Apply appropriate fungicides to protect the crop."
+  },
+  "Tomato Septoria Leaf Spot": {
+    definition: "Septoria leaf spot caused by *Septoria lycopersici* forms circular spots with dark margins on leaves. The disease causes premature defoliation if untreated.",
+    remedies: "Remove infected leaves as soon as they appear and rotate crops regularly. Apply fungicides to slow disease progression."
+  },
+  "Tomato Spider Mite": {
+    definition: "Tiny pests that cause stippling, yellowing, and webbing on tomato leaves. Heavy infestations can lead to plant death under drought stress.",
+    remedies: "Use insecticidal soap to reduce mite populations and introduce predatory mites as biological control agents. Maintain adequate humidity to discourage mite outbreaks."
+  },
+  "Tomato Target Spot": {
+    definition: "Caused by *Corynespora cassiicola*, forming circular lesions on leaves and fruits. Severe infections can cause defoliation and fruit drop.",
+    remedies: "Apply appropriate fungicides at the first appearance of symptoms. Maintain good field sanitation and avoid overhead irrigation."
+  },
+  "Tomato Mosaic Virus": {
+    definition: "A viral disease leading to mosaic-like mottling and leaf curling in tomatoes. It can persist in plant debris and contaminated equipment.",
+    remedies: "Use virus-free seeds and sanitize tools regularly to prevent spread. Remove and destroy infected plants promptly."
+  },
+  "Tomato Yellow Leaf Curl Virus": {
+    definition: "A tomato virus transmitted by whiteflies, causing yellowing and curling of leaves. It can result in stunted growth and poor fruit production.",
+    remedies: "Control whiteflies using insecticides or traps and use resistant tomato varieties. Remove infected plants to limit virus spread."
+  }
+};
+function goBack() {
+  document.getElementById('diseaseList').style.display = "block";
+  document.getElementById('searchInput').style.display = "inline-block";
+  document.getElementById('diseaseDetail').style.display = "none";
+}
+
+function showDiseaseDetail(diseaseName) {
+  document.getElementById('diseaseList').style.display = "none";
+  document.getElementById('searchInput').style.display = "none";
+  document.getElementById('diseaseDetail').style.display = "block";
+
+  const disease = diseaseDetails[diseaseName];
+
+  if (disease) {
+    document.getElementById('detailContent').innerHTML = `
+      <h3>${diseaseName}</h3>
+      <h4>Definition</h4>
+      <p>${disease.definition}</p>
+      <h4>Remedies</h4>
+      <p>${disease.remedies}</p>
+    `;
+  } else {
+    document.getElementById('detailContent').innerHTML = `<h3>${diseaseName}</h3><p>No details available.</p>`;
+  }
+}
+</script>
+
+</body>
+</html>
+

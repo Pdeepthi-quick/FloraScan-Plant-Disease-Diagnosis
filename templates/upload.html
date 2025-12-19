@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FloraScan - Upload</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #2F4F3C;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .upload-box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+    h1, h2 {
+      color: #1F3A2D;
+    }
+    button {
+      background-color: #1F3A2D;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 80%;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #365C49;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .choose-btn {
+      margin-bottom: 10px;
+    }
+    .file-name {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+    #preview {
+      margin-top: 15px;
+      width: 200px;
+      border-radius: 10px;
+      display: none;
+    }
+    .loading {
+      margin-top: 15px;
+      color: #888;
+      display: none;
+    }
+    #prediction-result {
+      margin-top: 20px;
+      background-color: #e6ffe6;
+      border-left: 5px solid #2e7d32;
+      padding: 15px;
+      text-align: left;
+      display: none;
+      border-radius: 10px;
+    }
+    #prediction-result h3 {
+      margin-top: 0;
+      color: #1F3A2D;
+    }
+    #prediction-result p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+    @media screen and (max-width: 768px) {
+      .upload-box {
+        width: 95%;
+        padding: 20px;
+      }
+      button {
+        font-size: 13px;
+        width: 100%;
+        padding: 10px;
+      }
+      #preview {
+        width: 160px;
+      }
+      #prediction-result {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <h1>🌿 <strong>FloraScan</strong></h1>
+            <h5 class="tagline">AI-Driven Plant Disease Diagnosis</h5>
+        </div>
+
+        <nav class="navbar">
+            <!-- Update Home link to point to Flask route -->
+            <a href="http://127.0.0.1:5000/">Home</a>
+            <a href="http://localhost:5000/upload">Upload Image</a>
+            
+        </nav>
+    </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Upload & Scan Plant Leaf</h1>
+
+    <!-- Upload Box -->
+    <div class="upload-box">
+      <img src="{{ url_for('static', filename='images/leaf-icon.png') }}" alt="Leaf Icon" style="width: 50px; margin-bottom: 10px;" />
+      <p>Only plant images allowed</p>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="image" accept="image/*" onchange="previewImage(event)" required>
+        <button type="button" class="choose-btn" onclick="document.getElementById('fileInput').click();">Choose Image</button>
+        <p class="file-name" id="fileName">No file selected</p>
+        <img id="preview" src="#" alt="Preview" />
+        <button type="submit" class="diagnose-btn">Start Diagnosis</button>
+      </form>
+
+      <div class="loading" id="loading">🕒 Scanning... Please wait.</div>
+
+      <div id="prediction-result">
+        <h3>Prediction Result:</h3>
+        <p><strong>Disease:</strong> <span id="disease"></span></p>
+        <p><strong>Symptoms:</strong> <span id="symptoms"></span></p>
+        <p><strong>Remedies:</strong> <span id="remedies"></span></p>
+      </div>
+
+      <button id="download-pdf" style="display:none; margin-top: 15px;">📄 Download Report as PDF</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" style="color:white; text-align:center; padding:20px;">
+    <div>
+      © 2025 FloraScan &nbsp;|&nbsp;
+      <a href="/faq" style="color: white; text-decoration: none;">FAQ</a>
+    </div>
+    <div class="social-icons" style="margin-top: 10px;">
+      <a href="https://facebook.com" target="_blank"><img src="{{ url_for('static', filename='images/facebook.svg') }}" alt="Facebook Logo" /></a>
+      <a href="https://twitter.com" target="_blank"><img src="{{ url_for('static', filename='images/x.svg') }}" alt="Twitter Logo" /></a>
+      <a href="https://instagram.com" target="_blank"><img src="{{ url_for('static', filename='images/instagram.svg') }}" alt="Instagram Logo" /></a>
+      <a href="https://linkedin.com" target="_blank"><img src="{{ url_for('static', filename='images/linkedin.png') }}" alt="LinkedIn Logo" /></a>
+    </div>
+  </footer>
+
+  <!-- JS Scripts -->
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById('preview');
+      const fileNameDisplay = document.getElementById('fileName');
+
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        fileNameDisplay.textContent = file.name;
+      } else {
+        preview.style.display = 'none';
+        preview.src = '#';
+        fileNameDisplay.textContent = "No file selected";
+      }
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const loading = document.getElementById('loading');
+      const resultDiv = document.getElementById('prediction-result');
+      const downloadBtn = document.getElementById('download-pdf');
+
+      loading.style.display = 'block';
+      resultDiv.style.display = 'none';
+      downloadBtn.style.display = 'none';
+      downloadBtn.onclick = null;
+
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch prediction'))
+      .then(data => {
+        if (data.success && data.prediction) {
+          document.getElementById('disease').textContent = data.prediction.disease;
+          document.getElementById('symptoms').textContent = data.prediction.symptoms;
+          document.getElementById('remedies').textContent = data.prediction.remedies;
+          resultDiv.style.display = 'block';
+
+          // Show download button and set onclick for generating PDF on click
+          downloadBtn.style.display = 'inline-block';
+          downloadBtn.onclick = () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const disease = document.getElementById('disease').textContent;
+            const symptoms = document.getElementById('symptoms').textContent;
+            const remedies = document.getElementById('remedies').textContent;
+
+            doc.setFontSize(18);
+            doc.text("🌿 FloraScan - Plant Disease Report", 20, 20);
+
+            doc.setFontSize(14);
+            doc.text(`Disease: ${disease}`, 20, 40);
+
+            doc.text("Symptoms:", 20, 60);
+            doc.setFontSize(12);
+            doc.text(doc.splitTextToSize(symptoms, 170), 20, 70);
+
+            doc.setFontSize(14);
+            doc.text("Remedies:", 20, 110);
+            doc.setFontSize(12);
+            doc.text(doc.splitTextToSize(remedies, 170), 20, 120);
+
+            doc.save('FloraScan_Report.pdf');
+          };
+        } else {
+          alert("Prediction failed. Please try again.");
+        }
+      })
+      .catch(error => {
+        alert("Error: " + error);
+      })
+      .finally(() => {
+        loading.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
