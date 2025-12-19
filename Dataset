@@ -1,0 +1,8 @@
+Dataset
+
+The dataset used for this project was obtained from Kaggle.
+It contains plant leaf images categorized into healthy and diseased classes.
+Due to size and licensing restrictions, the dataset is not included in this repository.
+The dataset can be accessed from Kaggle using the following link:
+
+https://www.kaggle.com/datasets
