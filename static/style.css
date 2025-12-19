@@ -1,1 +1,151 @@
+/* 🌐 General Styles (Apply to all screen sizes) */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #2F4F3C;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
 
+/* Header */
+.header {
+  background: #FFFFFF;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 5px solid #8B5E3B;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1F3A2D;
+}
+
+.navbar a {
+  color: #1F3A2D;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: 600;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Main Content */
+.container {
+  width: 90%;
+  max-width: 600px;
+  margin: 50px auto;
+  background: #DDE5D0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #1F3A2D;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Upload Box */
+.upload-box {
+  background: #FFFFFF;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Square Image Box */
+.image-box {
+  width: 80px;
+  height: 80px;
+  background-color: #E3E3E3;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px auto;
+}
+
+.image-box img {
+  width: 50px;
+  opacity: 0.7;
+}
+
+/* Text */
+.upload-box p {
+  color: #1F3A2D;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Buttons */
+.choose-btn,
+.diagnose-btn {
+  background-color: #1F3A2D;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  width: 80%;
+}
+
+.choose-btn:hover,
+.diagnose-btn:hover {
+  background-color: #365C49;
+}
+
+/* File Name */
+.file-name {
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #FFFFFF;
+  margin-top: 30px;
+}
+
+.logo h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #1F3A2D;
+}
+
+.logo .tagline {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  color: #1F3A2D;
+}
+
+/* 📱 Mobile Specific Styles */
+@media screen and (max-width: 768px) {
+  .container,
+  .upload-box {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+}
+ 
